@@ -14,7 +14,7 @@ function peabody(timestamp) {
     function checkSites(err, sites) {
       if(err || !sites.length) {
         res.writeHead(404, {'content-type': 'text/plain'})
-        res.end('Site not available')
+        return res.end('Site not available')
       }
 
       request.get(sites[1].href, respond)
