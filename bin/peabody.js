@@ -15,7 +15,7 @@ var options = argParser(process.argv.slice(2))
 if(!options._.length || options.help) return help()
 if(options.version) return version()
 
-peabody(options._[0]).listen(port)
+peabody(options._.join(' ')).listen(port)
 console.log('Mr. Peabody listening on port ' + port)
 
 function version() {

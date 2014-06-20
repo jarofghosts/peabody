@@ -1,7 +1,7 @@
 peabody
 ====
 
-your wayback machine proxy
+your [wayback machine](https://archive.org) proxy
 
 ## installation
 
