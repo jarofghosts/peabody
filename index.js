@@ -27,7 +27,7 @@ function peabody(timestamp) {
     memento(req.url, timestamp, checkSites)
 
     function checkSites(err, sites) {
-      if(err || !sites.length || !timeNear(sites[1].datetime, timestamp)) {
+      if(err || sites.length < 2 || !timeNear(sites[1].datetime, timestamp)) {
         res.writeHead(404, {'content-type': 'text/plain'})
 
         return res.end('Site not available')
