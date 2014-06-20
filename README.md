@@ -31,7 +31,6 @@ internet of `<time>`!
 * currently will return whatever the wayback machine finds nearest to your
   timestamp. so, if you specify a time of `2004` and there isn't any available
   cache before 2008, the 2008 cache will be loaded. 
-* external static assets need work to load correctly
 
 ## license
 
