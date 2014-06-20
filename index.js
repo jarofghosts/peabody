@@ -27,7 +27,7 @@ function peabody(timestamp) {
     memento(req.url, timestamp, checkSites)
 
     function checkSites(err, sites) {
-      if(err || !sites.length) {
+      if(err || !sites.length || !timeNear(sites[1].datetime, timestamp)) {
         res.writeHead(404, {'content-type': 'text/plain'})
 
         return res.end('Site not available')
@@ -74,4 +74,10 @@ function peabody(timestamp) {
       response.pipe(res)
     }
   }
+}
+
+function timeNear(t1, t2) {
+  var FUZZINESS = 150 * 24 * 60 * 60 * 100
+
+  return Math.abs(Date.parse(t1) - Date.parse(t2)) < FUZZINESS
 }
