@@ -11,11 +11,16 @@ var package = require('../package.json')
 
 var options = argParser(process.argv.slice(2))
   , port = +options.port || 7183
+  , fuzz
 
 if(!options._.length || options.help) return help()
 if(options.version) return version()
 
-peabody(options._.join(' ')).listen(port)
+if(options.fuzz && !isNaN(options.fuzz)) {
+  fuzz = options.fuzz * 24 * 60 * 60 * 1000
+}
+
+peabody(options._.join(' '), fuzz).listen(port)
 console.log('Mr. Peabody listening on port ' + port)
 
 function version() {

@@ -4,33 +4,36 @@ var http = require('http')
 var memento = require('memento-client')
   , request = require('hyperquest')
 
+var timeNear = require('./lib/time-near')
+
 var WAYBACK_HOST = 'web.archive.org'
   , isAsset = /\/web\/\d{14}/
 
 module.exports = peabody
 
-function peabody(timestamp) {
+function peabody(timestamp, fuzz) {
   return http.createServer(handler)
 
   function handler(req, res) {
-    if(isAsset.test(req.url)) {
-      return request.get(
-          url.format({
-              host: WAYBACK_HOST
-            , pathname: url.parse(req.url).path
-            , protocol: 'http'
-          })
-        , assetRespond
-      )
+    var assetUrl
+
+    if(!isAsset.test(req.url)) {
+      return memento(req.url, timestamp, checkSites)
     }
 
-    memento(req.url, timestamp, checkSites)
+    assetUrl = url.format({
+        host: WAYBACK_HOST
+      , pathname: url.parse(req.url).path
+      , protocol: 'http'
+    })
+
+    request.get(assetUrl, assetRespond)
 
     function checkSites(err, sites) {
-      if(err || sites.length < 2 || !timeNear(sites[1].datetime, timestamp)) {
-        res.writeHead(404, {'content-type': 'text/plain'})
+      var noSites = sites.length < 2
 
-        return res.end('Site not available')
+      if(err || noSites || !timeNear(sites[1].datetime, timestamp, fuzz)) {
+        return notFound(res)
       }
 
       request.get(sites[1].href, respond)
@@ -38,9 +41,7 @@ function peabody(timestamp) {
 
     function respond(err, response) {
       if(err) {
-        res.writeHead(404, {'content-type': 'text/plain'})
-
-        return res.end('Site not available')
+        return notFound(res)
       }
 
       response.pipe(res)
@@ -49,20 +50,19 @@ function peabody(timestamp) {
 
     function assetRespond(err, response) {
       if(err) {
-        res.writeHead(404, {'content-type': 'text/plain'})
-
-        return res.end('Site not available')
+        return notFound(res)
       }
 
+      var assetUrl
+
       if(response.statusCode === 302) {
-        return request.get(
-            url.format({
-                host: WAYBACK_HOST
-              , pathname: response.headers.location
-              , protocol: 'http'
-            })
-          , assetRespond
-        )
+        assetUrl = url.format({
+            host: WAYBACK_HOST
+          , pathname: response.headers.location
+          , protocol: 'http'
+        })
+
+        return request.get(assetUrl, assetRespond)
       }
 
       res.writeHead(response.statusCode, response.headers)
@@ -76,8 +76,8 @@ function peabody(timestamp) {
   }
 }
 
-function timeNear(t1, t2) {
-  var FUZZINESS = 150 * 24 * 60 * 60 * 100
+function notFound(res) {
+  res.writeHead(404, {'content-type': 'text/plain'})
 
-  return Math.abs(Date.parse(t1) - Date.parse(t2)) < FUZZINESS
+  res.end('Site not available')
 }

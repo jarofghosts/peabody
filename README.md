@@ -22,6 +22,7 @@ internet of `<time>`!
 
 ### options
 
+* `--fuzz <days>` - Allow `<days>` fuzziness in time travel
 * `--port <port>` - Listen on port `<port>`, default 7183
 * `--version` - Print version information
 * `--help` - Print help text
