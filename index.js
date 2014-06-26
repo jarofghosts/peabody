@@ -68,7 +68,7 @@ function peabody(timestamp, fuzz) {
       res.writeHead(response.statusCode, response.headers)
 
       if(response.statusCode < 200 || response.statusCode > 299) {
-        res.end()
+        return res.end()
       }
 
       response.pipe(res)
