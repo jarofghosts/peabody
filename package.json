@@ -1,6 +1,6 @@
 {
   "name": "peabody",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "wayback proxy",
   "main": "index.js",
   "preferGlobal": true,
