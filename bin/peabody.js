@@ -31,5 +31,5 @@ function help() {
   version()
   fs.createReadStream(
       path.join(__dirname, '..', 'help.txt')
-  ).pipe(process.stdout)
+  ).pipe(process.stderr)
 }
