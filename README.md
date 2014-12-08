@@ -1,5 +1,5 @@
 peabody
-====
+=======
 
 [![Build Status](http://img.shields.io/travis/jarofghosts/peabody.svg?style=flat)](https://travis-ci.org/jarofghosts/peabody)
 [![npm install](http://img.shields.io/npm/dm/peabody.svg?style=flat)](https://www.npmjs.org/package/peabody)

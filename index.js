@@ -11,7 +11,9 @@ var WAYBACK_HOST = 'web.archive.org'
 
 module.exports = peabody
 
-function peabody(timestamp, fuzz) {
+function peabody(timestamp, fuzz, _host) {
+  var host = _host || WAYBACK_HOST
+
   return http.createServer(handler)
 
   function handler(req, res) {
@@ -22,7 +24,7 @@ function peabody(timestamp, fuzz) {
     }
 
     assetUrl = url.format({
-        host: WAYBACK_HOST
+        host: host
       , pathname: url.parse(req.url).path
       , protocol: 'http'
     })
@@ -57,7 +59,7 @@ function peabody(timestamp, fuzz) {
 
       if(response.statusCode === 302) {
         assetUrl = url.format({
-            host: WAYBACK_HOST
+            host: host
           , pathname: response.headers.location
           , protocol: 'http'
         })
