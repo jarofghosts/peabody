@@ -10,7 +10,7 @@ test('returns true if time is within 150 days', function(t) {
 })
 
 test('returns false if time is not within 150 days', function(t) {
-  t.plan(1)
+  t.plan(2)
 
   t.ok(!timeNear(Date.now(), Date.now() + days(151)))
   t.ok(!timeNear('' + new Date(), '' + new Date(Date.now() + days(151))))
